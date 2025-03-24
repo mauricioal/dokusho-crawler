@@ -3,10 +3,11 @@
 import os
 import sys
 import logging
+import uuid
 import gradio as gr
 
 from modules.data_extraction import extract_linkedin_profile
-from modules.data_processing import split_profile_data, create_vector_database
+from modules.data_processing import split_profile_data, create_vector_database, verify_embeddings
 from modules.llm_interface import change_llm_model
 from modules.query_engine import generate_initial_facts, answer_user_query
 import config
@@ -42,6 +43,10 @@ def process_profile(linkedin_url, api_key, use_mock, selected_model):
         if selected_model != config.LLM_MODEL_ID:
             change_llm_model(selected_model)
             
+        # Use a default URL for mock data if none provided
+        if use_mock and not linkedin_url:
+            linkedin_url = "https://www.linkedin.com/in/leonkatsnelson/"
+            
         # Extract profile data
         profile_data = extract_linkedin_profile(
             linkedin_url,
@@ -55,17 +60,23 @@ def process_profile(linkedin_url, api_key, use_mock, selected_model):
         # Split data into nodes
         nodes = split_profile_data(profile_data)
         
+        if not nodes:
+            return "Failed to process profile data into nodes.", None
+        
         # Create vector database
         index = create_vector_database(nodes)
         
         if not index:
             return "Failed to create vector database.", None
         
+        # Verify embeddings
+        if not verify_embeddings(index):
+            logger.warning("Some embeddings may be missing or invalid")
+        
         # Generate initial facts
         facts = generate_initial_facts(index)
         
         # Generate a unique session ID
-        import uuid
         session_id = str(uuid.uuid4())
         
         # Store the index for this session
@@ -94,6 +105,9 @@ def chat_with_profile(session_id, user_query, chat_history):
     
     if session_id not in active_indices:
         return chat_history + [[user_query, "Session expired. Please process the LinkedIn profile again."]]
+    
+    if not user_query.strip():
+        return chat_history
     
     try:
         # Get the index for this session
@@ -131,7 +145,8 @@ def create_gradio_interface():
                     api_key = gr.Textbox(
                         label="ProxyCurl API Key (Leave empty to use mock data)",
                         placeholder="Your ProxyCurl API Key",
-                        type="password"
+                        type="password",
+                        value=config.PROXYCURL_API_KEY
                     )
                     use_mock = gr.Checkbox(label="Use Mock Data", value=True)
                     model_dropdown = gr.Dropdown(
@@ -161,3 +176,26 @@ def create_gradio_interface():
             )
             
             chat_btn = gr.Button("Send")
+            
+            chat_btn.click(
+                fn=chat_with_profile,
+                inputs=[session_id, chat_input, chatbot],
+                outputs=[chatbot]
+            )
+            
+            chat_input.submit(
+                fn=chat_with_profile,
+                inputs=[session_id, chat_input, chatbot],
+                outputs=[chatbot]
+            )
+    
+    return demo
+
+if __name__ == "__main__":
+    demo = create_gradio_interface()
+    # Launch the Gradio interface
+    demo.launch(
+        server_name="127.0.0.1",  
+        server_port=7860,
+        share=False
+    )
