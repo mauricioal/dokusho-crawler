@@ -5,7 +5,7 @@ WATSONX_URL = "https://us-south.ml.cloud.ibm.com"
 WATSONX_PROJECT_ID = "skills-network"
 
 # Model settings
-LLM_MODEL_ID = "ibm/granite-3-8b-instruct"
+LLM_MODEL_ID = "ibm/granite-3-2-8b-instruct"
 EMBEDDING_MODEL_ID = "ibm/slate-125m-english-rtrvr"
 
 # ProxyCurl API settings

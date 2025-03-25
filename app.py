@@ -127,7 +127,7 @@ def create_gradio_interface():
     """Create the Gradio interface for the Icebreaker Bot."""
     # Define available LLM models
     available_models = [
-        "ibm/granite-3-8b-instruct",
+        "ibm/granite-3-2-8b-instruct",
         "meta-llama/llama-3-3-70b-instruct"
     ]
     
