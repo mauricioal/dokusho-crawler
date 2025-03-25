@@ -24,59 +24,10 @@ def extract_linkedin_profile(
     Returns:
         Dictionary containing the LinkedIn profile data.
     """
-    start_time = time.time()
+    # TODO: Implement this function to extract LinkedIn profile data
+    # 1. If mock is True, load data from the mock URL in config.py
+    # 2. If mock is False, use the ProxyCurl API to extract the profile data
+    # 3. Clean the data by removing empty values and unwanted fields
+    # 4. Return the cleaned data as a dictionary
     
-    if mock:
-        logger.info("Using mock data from a premade JSON file...")
-        mock_url = config.MOCK_DATA_URL
-        response = requests.get(mock_url, timeout=30)
-    else:
-        # Ensure API key is provided when mock is False
-        if not api_key:
-            raise ValueError("ProxyCurl API key is required when mock is set to False.")
-        
-        logger.info("Starting to extract the LinkedIn profile...")
-
-        # Set up the API endpoint and headers
-        api_endpoint = "https://nubela.co/proxycurl/api/v2/linkedin"
-        headers = {
-            "Authorization": api_key
-        }
-
-        # Prepare parameters for the request
-        params = {
-            "url": linkedin_profile_url,
-            "fallback_to_cache": "on-error",
-            "use_cache": "if-present",
-            "skills": "include",
-            "inferred_salary": "include",
-            "personal_email": "include",
-            "personal_contact_number": "include"
-        }
-
-        logger.info(f"Sending API request to ProxyCurl at {time.time() - start_time:.2f} seconds...")
-
-        # Send API request
-        response = requests.get(api_endpoint, headers=headers, params=params, timeout=10)
-    
-    logger.info(f"Received response at {time.time() - start_time:.2f} seconds...")
-
-    # Check if response is successful
-    if response.status_code == 200:
-        # Clean the data, remove empty values and unwanted fields
-        data = response.json()
-        data = {
-            k: v
-            for k, v in data.items()
-            if v not in ([], "", None) and k not in ["people_also_viewed", "certifications"]
-        }
-
-        if data.get("groups"):
-            for group_dict in data.get("groups"):
-                group_dict.pop("profile_pic_url", None)
-
-        return data
-    else:
-        logger.error(f"Failed to retrieve data. Status code: {response.status_code}")
-        logger.error(f"Response: {response.text}")
-        return {}
+    return {}  # Replace with your implementation
