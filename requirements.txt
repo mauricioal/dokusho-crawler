@@ -6,4 +6,4 @@ llama-index-llms-ibm==0.2.0
 llama-index-embeddings-ibm==0.2.0
 llama-index-readers-web==0.2.2
 requests==2.32.2
-gradio==4.44.1
+gradio==4.13.0
