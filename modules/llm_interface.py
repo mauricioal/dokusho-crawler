@@ -21,6 +21,7 @@ def create_watsonx_embedding() -> WatsonxEmbeddings:
         model_id=config.EMBEDDING_MODEL_ID,
         url=config.WATSONX_URL,
         project_id=config.WATSONX_PROJECT_ID,
+        apikey=config.WATSONX_APIKEY,
         truncate_input_tokens=3,
     )
     logger.info(f"Created Watsonx Embedding model: {config.EMBEDDING_MODEL_ID}")
@@ -52,6 +53,7 @@ def create_watsonx_llm(
         model_id=config.LLM_MODEL_ID,
         url=config.WATSONX_URL,
         project_id=config.WATSONX_PROJECT_ID,
+        apikey=config.WATSONX_APIKEY,
         temperature=temperature,
         max_new_tokens=max_new_tokens,
         additional_params=additional_params,
