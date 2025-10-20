@@ -6,11 +6,33 @@ from typing import Dict, List, Any, Optional
 
 from llama_index.core import Document, VectorStoreIndex
 from llama_index.core.node_parser import SentenceSplitter
+from llama_index.readers.web import SimpleWebPageReader
 
 from modules.llm_interface import create_watsonx_embedding
 import config
 
 logger = logging.getLogger(__name__)
+
+def fetch_webpage_content(url: str) -> Document:
+    """Fetch webpage content using SimpleWebPageReader.
+    
+    Args:
+        url: The URL of the webpage to fetch.
+    
+    Returns:
+        The content of the webpage as a string.
+    """
+    try:
+        reader = SimpleWebPageReader()
+        documents = reader.load_data(urls=[url])
+        if documents:
+            return documents[0]
+        else:
+            logger.warning(f"No content found at {url}")
+            return ""
+    except Exception as e:
+        logger.error(f"Error fetching webpage content from {url}: {e}")
+        return ""
 
 def split_profile_data(profile_data: Dict[str, Any]) -> List:
     """Splits the LinkedIn profile JSON data into nodes.
@@ -36,6 +58,26 @@ def split_profile_data(profile_data: Dict[str, Any]) -> List:
         return nodes
     except Exception as e:
         logger.error(f"Error in split_profile_data: {e}")
+        return []
+    
+def split_webpage_data(webpage_data: Document) -> List:
+    """Splits the webpage Document into nodes.
+    
+    Args:
+        webpage_data: Document object containing the webpage content.
+        
+    Returns:
+        List of document nodes.
+    """
+    try:
+        # Split the document into nodes using SentenceSplitter
+        splitter = SentenceSplitter(chunk_size=config.CHUNK_SIZE)
+        nodes = splitter.get_nodes_from_documents([webpage_data])
+        
+        logger.info(f"Created {len(nodes)} nodes from webpage data")
+        return nodes
+    except Exception as e:
+        logger.error(f"Error in split_webpage_data: {e}")
         return []
 
 def create_vector_database(nodes: List) -> Optional[VectorStoreIndex]:

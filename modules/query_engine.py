@@ -50,11 +50,47 @@ def generate_initial_facts(index: VectorStoreIndex) -> str:
     
     return "Facts will be generated here."  # Replace with your implementation
 
+def generate_summary(index: VectorStoreIndex) -> str:
+    """Generates a summary of a provided webpage based on its content.
+    Args:
+        index: VectorStoreIndex containing the webpage data.   
+    Returns:
+        String containing the summary of the webpage.
+    """
+    try:
+        # Create LLM for generating summary
+        watsonx_llm = create_watsonx_llm(
+            temperature=0.0,
+            max_new_tokens=500,
+            decoding_method="sample"
+        )
+        
+        # Create prompt template
+        summary_prompt = PromptTemplate(template=config.WEBPAGE_SUMMARY_TEMPLATE)
+        
+        # Create query engine
+        query_engine = index.as_query_engine(
+            streaming=False,
+            similarity_top_k=config.SIMILARITY_TOP_K,
+            llm=watsonx_llm,
+            text_qa_template=summary_prompt
+        )
+        
+        # Execute the query
+        query = "Provide a concise summary of the content of this webpage."
+        response = query_engine.query(query)
+        
+        # Return the summary
+        return response.response
+    except Exception as e:
+        logger.error(f"Error in generate_summary: {e}")
+        return "Failed to generate summary."
+
 def answer_user_query(index: VectorStoreIndex, user_query: str) -> Any:
     """Answers the user's question using the vector database and the LLM.
     
     Args:
-        index: VectorStoreIndex containing the LinkedIn profile data.
+        index: VectorStoreIndex containing the extracted data.
         user_query: The user's question.
         
     Returns:

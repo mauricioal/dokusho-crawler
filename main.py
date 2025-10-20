@@ -6,8 +6,8 @@ import logging
 import argparse
 
 from modules.data_extraction import extract_linkedin_profile
-from modules.data_processing import split_profile_data, create_vector_database, verify_embeddings
-from modules.query_engine import generate_initial_facts, answer_user_query
+from modules.data_processing import fetch_webpage_content, split_profile_data, split_webpage_data, create_vector_database, verify_embeddings
+from modules.query_engine import generate_initial_facts, generate_summary, answer_user_query
 from typing import Dict, Any, Optional
 import config
 
@@ -65,6 +65,45 @@ def process_linkedin(linkedin_url, api_key=None, mock=False):
     except Exception as e:
         logger.error(f"Error occurred: {str(e)}")
 
+def process_webpage(webpage_url: str):
+    """
+    Processes a general webpage URL, extracts data from the page, and interacts with the user.
+
+    Args:
+        webpage_url: The webpage URL to extract data from.
+        api_key: ProxyCurl API key. Not used in this function but kept for consistency.
+        mock: If True, indicates mock processing. Not used in this function but kept for consistency.
+    """
+    try:
+        # Extract the webpage data
+        webpage_data = fetch_webpage_content(webpage_url)
+
+          # Split the data into nodes
+        nodes = split_webpage_data(webpage_data)
+        
+        # Store in vector database
+        vectordb_index = create_vector_database(nodes)
+        
+        if not vectordb_index:
+            logger.error("Failed to create vector database.")
+            return
+        
+        # Verify embeddings
+        if not verify_embeddings(vectordb_index):
+            logger.warning("Some embeddings may be missing or invalid.")
+        
+        # Generate and display the initial facts
+        initial_facts = generate_summary(vectordb_index)
+        
+        print("\nHere is a summary of this webpage:")
+        print(initial_facts)
+        
+        # Start the chatbot interface
+        chatbot_interface(vectordb_index)
+        
+    except Exception as e:
+        logger.error(f"Error occurred: {str(e)}")
+
 def chatbot_interface(index):
     """
     Provides a simple chatbot interface for user interaction.
@@ -108,14 +147,15 @@ def main():
     
     api_key = args.api_key or config.PROXYCURL_API_KEY
     
-    if not use_mock and not api_key:
-        api_key = input("Enter ProxyCurl API key: ")
+    # if not use_mock and not api_key:
+    #     api_key = input("Enter ProxyCurl API key: ")
     
     # Use a default URL for mock data if none provided
-    if use_mock and not linkedin_url:
-        linkedin_url = "https://www.linkedin.com/in/leonkatsnelson/"
+    # if use_mock and not linkedin_url:
+    #     linkedin_url = "https://www.linkedin.com/in/leonkatsnelson/"
     
-    process_linkedin(linkedin_url, api_key, mock=use_mock)
+    # process_linkedin(linkedin_url, api_key, mock=use_mock)
+    process_webpage("https://kids.gakken.co.jp/kagaku/kagaku110/weatherdefinition20240405/")
 
 if __name__ == "__main__":
     main()

@@ -38,6 +38,18 @@ Based on the context provided, list 3 interesting facts about this person's care
 Answer in detail, using only the information provided in the context.
 """
 
+WEBPAGE_SUMMARY_TEMPLATE = """
+You are an AI assistant that provides detailed answers based on the provided context.
+
+Context information is below:
+
+{context_str}
+
+Based on the context provided, summarize the text in the original language.
+
+Answer in detail, using only the information provided in the context.
+"""
+
 USER_QUESTION_TEMPLATE = """
 You are an AI assistant that provides detailed answers to questions based on the provided context.
 
