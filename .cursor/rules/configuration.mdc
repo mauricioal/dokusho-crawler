@@ -1,0 +1,58 @@
+---
+globs: config.py
+---
+
+# Configuration Management Guidelines
+
+## Configuration Structure ([config.py](mdc:config.py))
+- Centralize all configuration settings in a single file
+- Use clear, descriptive variable names
+- Group related settings together
+- Provide default values where appropriate
+
+## API Configuration
+- Store IBM watsonx.ai credentials securely
+- Use environment variables for sensitive data
+- Provide fallback values for optional settings
+- Document required vs optional configuration
+
+## Model Settings
+- Define LLM and embedding model IDs
+- Set appropriate parameters (temperature, tokens, etc.)
+- Allow for model switching and configuration
+- Document model capabilities and limitations
+
+## Query Parameters
+- Set similarity search parameters
+- Configure chunk sizes and processing limits
+- Define response generation parameters
+- Allow for parameter tuning and optimization
+
+## Security Best Practices
+- Never commit API keys to version control
+- Use environment variables for sensitive data
+- Implement proper key validation
+- Provide clear instructions for setup
+
+## Example Configuration Structure
+```python
+# API Configuration
+WATSONX_URL = "https://us-south.ml.cloud.ibm.com"
+WATSONX_PROJECT_ID = "your-project-id"
+WATSONX_APIKEY = "your-api-key"
+
+# Model Settings
+LLM_MODEL_ID = "ibm/granite-3-2-8b-instruct"
+EMBEDDING_MODEL_ID = "ibm/slate-125m-english-rtrvr"
+
+# Query Settings
+SIMILARITY_TOP_K = 7
+TEMPERATURE = 0.0
+MAX_NEW_TOKENS = 500
+```
+
+## Environment Variables
+- Use environment variables for production settings
+- Provide fallback to config file values
+- Document required environment variables
+- Implement proper validation for required settings

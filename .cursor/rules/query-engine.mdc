@@ -1,0 +1,53 @@
+---
+globs: modules/query_engine.py
+---
+
+# Query Engine Module Guidelines
+
+## Query Engine Implementation ([modules/query_engine.py](mdc:modules/query_engine.py))
+- Use proper prompt templates from [config.py](mdc:config.py)
+- Implement different query types: facts generation, summaries, Q&A
+- Use appropriate LLM parameters for different use cases
+- Handle query failures gracefully with fallback responses
+
+## Prompt Template Usage
+- Use `INITIAL_FACTS_TEMPLATE` for generating interesting facts
+- Use `WEBPAGE_SUMMARY_TEMPLATE` for content summarization
+- Use `USER_QUESTION_TEMPLATE` for interactive Q&A
+- Always include context in prompts for accurate responses
+
+## Query Engine Configuration
+- Set appropriate `similarity_top_k` for retrieval (default: 7)
+- Use temperature=0.0 for factual responses
+- Configure proper token limits for different response types
+- Use streaming=False for consistent responses
+
+## Response Generation
+- Generate initial facts for LinkedIn profiles
+- Create summaries for webpage content
+- Handle user queries with context-aware responses
+- Provide fallback responses when information is not available
+
+## Error Handling
+- Wrap all query operations in try-catch blocks
+- Log query execution and response generation
+- Handle LLM failures gracefully
+- Provide meaningful error messages
+
+## Example Query Engine Usage
+```python
+# Generate initial facts
+facts = generate_initial_facts(index)
+
+# Generate summary
+summary = generate_summary(index)
+
+# Answer user query
+response = answer_user_query(index, user_question)
+```
+
+## Context-Aware Responses
+- Always use retrieved context for response generation
+- Implement proper context filtering and ranking
+- Handle cases where context is insufficient
+- Provide clear indication when information is not available

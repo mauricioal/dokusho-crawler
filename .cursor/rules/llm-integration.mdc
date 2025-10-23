@@ -1,0 +1,54 @@
+---
+description: IBM watsonx.ai and LlamaIndex integration patterns
+---
+
+# IBM watsonx.ai and LlamaIndex Integration
+
+## IBM watsonx.ai Configuration
+- Always use configuration from [config.py](mdc:config.py) for API keys, URLs, and model IDs
+- Current models: `ibm/granite-3-2-8b-instruct` (LLM), `ibm/slate-125m-english-rtrvr` (embeddings)
+- Use proper error handling for API calls and model initialization
+
+## LlamaIndex Patterns
+- Use `VectorStoreIndex` for document indexing and retrieval
+- Implement proper chunking with `SentenceSplitter` and configurable chunk sizes
+- Always verify embeddings after creation using `verify_embeddings()`
+
+## LLM Interface Best Practices
+- Create LLM instances with appropriate temperature and token limits
+- Use streaming=False for consistent responses
+- Implement proper prompt templates using `PromptTemplate`
+- Handle model switching gracefully with `change_llm_model()`
+
+## Query Engine Configuration
+- Use `similarity_top_k` for retrieval (default: 7)
+- Set appropriate temperature (0.0 for factual responses)
+- Implement proper context retrieval and response generation
+- Use structured prompts for different use cases (facts, summaries, Q&A)
+
+## Error Handling for LLM Operations
+- Always wrap LLM calls in try-catch blocks
+- Log model initialization and query execution
+- Provide fallback responses for failed operations
+- Handle rate limiting and API errors gracefully
+
+## Example Integration Pattern
+```python
+# Create embedding model
+embedding_model = create_watsonx_embedding()
+
+# Create LLM with specific parameters
+llm = create_watsonx_llm(
+    temperature=0.0,
+    max_new_tokens=500,
+    decoding_method="sample"
+)
+
+# Create query engine with proper configuration
+query_engine = index.as_query_engine(
+    streaming=False,
+    similarity_top_k=config.SIMILARITY_TOP_K,
+    llm=llm,
+    text_qa_template=prompt_template
+)
+```

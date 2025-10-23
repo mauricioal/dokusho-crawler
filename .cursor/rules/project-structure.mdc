@@ -1,0 +1,33 @@
+---
+alwaysApply: true
+---
+
+# Project Structure Guide
+
+This is a LinkedIn Icebreaker Bot project that uses IBM watsonx.ai and LlamaIndex to generate personalized icebreakers and conversation starters based on LinkedIn profiles and web content.
+
+## Main Entry Points
+- [main.py](mdc:main.py) - Command-line interface for processing LinkedIn profiles and webpages
+- [app.py](mdc:app.py) - Gradio web interface for interactive usage
+- [config.py](mdc:config.py) - Configuration settings for IBM watsonx.ai, models, and API keys
+
+## Core Modules
+The project is organized into specialized modules in the `modules/` directory:
+
+- [modules/data_extraction.py](mdc:modules/data_extraction.py) - LinkedIn profile data extraction using ProxyCurl API or mock data
+- [modules/data_processing.py](mdc:modules/data_processing.py) - Data splitting, indexing, and vector database creation
+- [modules/llm_interface.py](mdc:modules/llm_interface.py) - IBM watsonx.ai LLM and embedding model setup
+- [modules/query_engine.py](mdc:modules/query_engine.py) - Query processing and response generation
+
+## Key Dependencies
+- **IBM watsonx.ai**: For LLM and embedding models
+- **LlamaIndex**: For document indexing and vector search
+- **Gradio**: For web interface
+- **ProxyCurl API**: For LinkedIn profile data extraction
+
+## Data Flow
+1. Extract data from LinkedIn profiles or webpages
+2. Process and split data into chunks
+3. Create vector database with embeddings
+4. Generate initial facts/summaries
+5. Enable interactive Q&A through chatbot interface

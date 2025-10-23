@@ -1,0 +1,55 @@
+---
+globs: *.py
+---
+
+# Python Coding Standards
+
+## Code Style and Formatting
+- Follow PEP 8 style guidelines
+- Use type hints for function parameters and return values
+- Use descriptive variable and function names
+- Keep functions focused and single-purpose
+- Use docstrings for all functions, classes, and modules
+
+## Error Handling
+- Always use try-catch blocks for external API calls and file operations
+- Log errors with appropriate log levels (ERROR, WARNING, INFO)
+- Provide meaningful error messages
+- Handle edge cases gracefully
+
+## Import Organization
+- Group imports: standard library, third-party, local modules
+- Use absolute imports for local modules
+- Import only what you need
+
+## Configuration Management
+- Store all configuration in [config.py](mdc:config.py)
+- Use environment variables for sensitive data like API keys
+- Never hardcode API keys or sensitive information in source code
+
+## Logging
+- Use the logging module for all output
+- Set appropriate log levels
+- Include context in log messages
+- Use structured logging when possible
+
+## Example Function Structure
+```python
+def process_data(data: Dict[str, Any]) -> Optional[str]:
+    """
+    Process the input data and return a result.
+    
+    Args:
+        data: Dictionary containing the input data
+        
+    Returns:
+        Processed result string or None if processing fails
+    """
+    try:
+        # Implementation here
+        logger.info("Processing data successfully")
+        return result
+    except Exception as e:
+        logger.error(f"Error processing data: {e}")
+        return None
+```

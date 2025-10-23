@@ -6,6 +6,7 @@ import logging
 import argparse
 
 from modules.data_extraction import extract_linkedin_profile
+from modules.renshuu_extraction import UserProfile, StudyTerm, StudyTermsList, extract_user_profile, extract_study_terms, create_mock_user_profile, create_mock_study_terms
 from modules.data_processing import fetch_webpage_content, split_profile_data, split_webpage_data, create_vector_database, verify_embeddings
 from modules.query_engine import generate_initial_facts, generate_summary, answer_user_query
 from typing import Dict, Any, Optional
@@ -156,6 +157,36 @@ def main():
     
     # process_linkedin(linkedin_url, api_key, mock=use_mock)
     process_webpage("https://kids.gakken.co.jp/kagaku/kagaku110/weatherdefinition20240405/")
+
+    # Extract Renshuu user profile
+    print("\n=== Renshuu User Profile ===")
+    user_profile = extract_user_profile(config.RENSHUU_API_KEY)
+    if user_profile:
+        print(f"User ID: {user_profile.id}")
+        print(f"Real Name: {user_profile.real_name}")
+        print(f"Level Progress: {user_profile.level_progress_percs}")
+    else:
+        print("Using mock data for demonstration...")
+        user_profile = create_mock_user_profile()
+        print(f"Mock User ID: {user_profile.id}")
+        print(f"Mock Real Name: {user_profile.real_name}")
+        print(f"Mock Level Progress: {user_profile.level_progress_percs}")
+
+    # Extract Renshuu study terms
+    print("\n=== Renshuu Study Terms ===")
+    study_terms = extract_study_terms(config.RENSHUU_API_KEY)
+    if study_terms:
+        print(f"Found {len(study_terms.terms)} study terms")
+        for i, term in enumerate(study_terms.terms[:3]):  # Show first 3 terms
+            meaning = term.meaning.get('spa', 'No meaning available')
+            print(f"Term {i+1}: {term.title_japanese} ({term.title_english}) - {meaning}")
+    else:
+        print("Using mock data for demonstration...")
+        study_terms = create_mock_study_terms()
+        print(f"Mock Study Terms: {len(study_terms.terms)} terms")
+        for i, term in enumerate(study_terms.terms):
+            meaning = term.meaning.get('spa', 'No meaning available')
+            print(f"Term {i+1}: {term.title_japanese} ({term.title_english}) - {meaning}")
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,54 @@
+---
+globs: modules/data_processing.py,modules/data_extraction.py
+---
+
+# Data Processing Module Guidelines
+
+## Data Extraction ([modules/data_extraction.py](mdc:modules/data_extraction.py))
+- Support both API-based and mock data extraction
+- Implement proper timeout handling for API calls
+- Use configurable API keys from [config.py](mdc:config.py)
+- Provide fallback to mock data when API fails
+- Log extraction progress and timing
+
+## Data Processing ([modules/data_processing.py](mdc:modules/data_processing.py))
+- Use `SentenceSplitter` with configurable chunk sizes (default: 400)
+- Implement both profile and webpage data splitting
+- Always verify vector database creation before proceeding
+- Use proper error handling for web content fetching
+- Support both LinkedIn profiles and general webpages
+
+## Vector Database Creation
+- Always use IBM watsonx.ai embeddings via `create_watsonx_embedding()`
+- Implement proper node splitting and indexing
+- Verify embeddings after creation
+- Handle empty or invalid data gracefully
+- Use consistent chunking strategies across different data types
+
+## Web Content Handling
+- Use `SimpleWebPageReader` for webpage content extraction
+- Handle different content types and encodings
+- Implement proper error handling for network requests
+- Support both LinkedIn profiles and general webpages
+
+## Data Validation
+- Check for empty or invalid data before processing
+- Validate API responses and mock data structure
+- Implement proper logging for data quality issues
+- Provide meaningful error messages for data processing failures
+
+## Example Data Processing Flow
+```python
+# Extract data
+data = extract_linkedin_profile(url, api_key, mock=False)
+
+# Split into nodes
+nodes = split_profile_data(data)
+
+# Create vector database
+index = create_vector_database(nodes)
+
+# Verify embeddings
+if not verify_embeddings(index):
+    logger.warning("Embedding verification failed")
+```

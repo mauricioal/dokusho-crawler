@@ -1,0 +1,56 @@
+---
+globs: app.py
+---
+
+# Gradio Web Interface Guidelines
+
+## Interface Design ([app.py](mdc:app.py))
+- Create user-friendly web interface for LinkedIn profile analysis
+- Support both LinkedIn URLs and general webpage URLs
+- Implement model selection dropdown for different LLM models
+- Provide clear input validation and error handling
+
+## Session Management
+- Use session-based storage for vector indexes
+- Implement proper session cleanup
+- Handle multiple concurrent users
+- Store chat history per session
+
+## User Experience
+- Provide clear instructions and examples
+- Show processing status and progress
+- Display results in a readable format
+- Implement proper error messages and feedback
+
+## Model Configuration
+- Allow users to select different LLM models
+- Support model switching during runtime
+- Validate model selection and availability
+- Provide model information and capabilities
+
+## Chat Interface
+- Implement conversational interface for Q&A
+- Maintain chat history within sessions
+- Handle different types of queries (facts, summaries, questions)
+- Provide context-aware responses
+
+## Error Handling
+- Display user-friendly error messages
+- Handle API failures gracefully
+- Provide fallback options when possible
+- Log errors for debugging purposes
+
+## Example Interface Structure
+```python
+# Create Gradio interface
+interface = gr.Interface(
+    fn=process_profile,
+    inputs=[
+        gr.Textbox(label="LinkedIn URL or Webpage URL"),
+        gr.Textbox(label="API Key (optional)"),
+        gr.Checkbox(label="Use Mock Data"),
+        gr.Dropdown(label="Model Selection")
+    ],
+    outputs=[gr.Textbox(label="Results"), gr.Chatbot(label="Chat")]
+)
+```
