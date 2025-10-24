@@ -1,0 +1,110 @@
+{
+  "schedules": [
+    {
+      "id": "7081972",
+      "name": "Words for Beginner Japanese"
+    }
+  ],
+  "contents": {
+    "pg": 1,
+    "total_pg": 14,
+    "terms": [
+      {
+        "kanji_full": "質問",
+        "hiragana_full": "しつもん",
+        "id": "280",
+        "edict_ent": "1320760",
+        "config": [
+          "ent_single"
+        ],
+        "user_data": {
+          "correct_count": 21,
+          "missed_count": 0,
+          "mastery_avg_perc": "44",
+          "study_vectors": {
+            "Kanji > Kana": {
+              "name": "Kanji > Kana",
+              "correct_count": 5,
+              "missed_count": 0,
+              "mastery_perc": 63,
+              "last_quizzed": "2025/09/07",
+              "next_quiz": "2025/10/27"
+            },
+            "Kana > Kanji": {
+              "name": "Kana > Kanji",
+              "correct_count": 0,
+              "missed_count": 0,
+              "mastery_perc": 0,
+              "last_quizzed": "Not yet",
+              "next_quiz": "2025/10/11"
+            },
+            "Kanji > Meaning": {
+              "name": "Kanji > Meaning",
+              "correct_count": 6,
+              "missed_count": 0,
+              "mastery_perc": 75,
+              "last_quizzed": "2025/10/10",
+              "next_quiz": "2026/01/02"
+            },
+            "Meaning > Kanji": {
+              "name": "Meaning > Kanji",
+              "correct_count": 5,
+              "missed_count": 0,
+              "mastery_perc": 63,
+              "last_quizzed": "2025/09/15",
+              "next_quiz": "2025/11/16"
+            },
+            "Kana > Meaning": {
+              "name": "Kana > Meaning",
+              "correct_count": 3,
+              "missed_count": 0,
+              "mastery_perc": 38,
+              "last_quizzed": "2025/07/14",
+              "next_quiz": "2025/10/18"
+            },
+            "Meaning > Kana": {
+              "name": "Meaning > Kana",
+              "correct_count": 2,
+              "missed_count": 0,
+              "mastery_perc": 25,
+              "last_quizzed": "2025/07/12",
+              "next_quiz": "2025/10/12"
+            },
+            "Listening": {
+              "name": "Listening",
+              "correct_count": 0,
+              "missed_count": 0,
+              "mastery_perc": 0,
+              "last_quizzed": "Not yet",
+              "next_quiz": "2025/07/09"
+            },
+            "Accent": {
+              "name": "Accent",
+              "correct_count": 0,
+              "missed_count": 0,
+              "mastery_perc": 0,
+              "last_quizzed": "Not yet",
+              "next_quiz": "2025/07/09"
+            },
+            "Writing": {
+              "name": "Writing",
+              "correct_count": 0,
+              "missed_count": 0,
+              "mastery_perc": 0,
+              "last_quizzed": "Not yet",
+              "next_quiz": "2025/07/09"
+            }
+          }
+        },
+        "reibuns": "328",
+        "pitch": [
+          "し⭧つもん"
+        ],
+        "typeofspeech": "(noun/する verb)",
+        "def": [
+          "pregunta"
+        ]
+      }
+    ]
+  }
+}

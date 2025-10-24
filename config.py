@@ -8,8 +8,6 @@ WATSONX_PROJECT_ID = "skills-network"
 LLM_MODEL_ID = "ibm/granite-3-2-8b-instruct"
 EMBEDDING_MODEL_ID = "ibm/slate-125m-english-rtrvr"
 
-# ProxyCurl API settings
-PROXYCURL_API_KEY = ""  # Replace with your API key
 
 # Mock data URL
 MOCK_DATA_URL = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/ZRe59Y_NJyn3hZgnF1iFYA/linkedin-profile-data.json"
@@ -26,18 +24,6 @@ TOP_P = 1
 CHUNK_SIZE = 400
 
 # LLM prompt templates
-INITIAL_FACTS_TEMPLATE = """
-You are an AI assistant that provides detailed answers based on the provided context.
-
-Context information is below:
-
-{context_str}
-
-Based on the context provided, list 3 interesting facts about this person's career or education.
-
-Answer in detail, using only the information provided in the context.
-"""
-
 WEBPAGE_SUMMARY_TEMPLATE = """
 You are an AI assistant that provides detailed answers based on the provided context.
 
@@ -59,5 +45,5 @@ Context information is below:
 
 Question: {query_str}
 
-Answer in full details, using only the information provided in the context. If the answer is not available in the context, say "I don't know. The information is not available on the LinkedIn page."
+Answer in full details, using only the information provided in the context. If the answer is not available in the context, say "I don't know. The information is not available on the webpage."
 """

@@ -1,0 +1,81 @@
+{
+  "schedules": [
+    {
+      "id": "7081974",
+      "name": "Kanji para principiantes (N5)"
+    }
+  ],
+  "contents": {
+    "pg": 1,
+    "total_pg": 2,
+    "terms": [
+      {
+        "id": "2160",
+        "kanji": "日",
+        "scount": "4",
+        "definition": "día, solar, Japón, sol, rayo de sol",
+        "onyomi": "ジツ,ニチ",
+        "kunyomi": "か,ひ",
+        "user_data": {
+          "correct_count": 29,
+          "missed_count": 3,
+          "mastery_avg_perc": "63",
+          "study_vectors": {
+            "Stroke count": {
+              "name": "Stroke count",
+              "correct_count": 4,
+              "missed_count": 0,
+              "mastery_perc": 50,
+              "last_quizzed": "2025/07/29",
+              "next_quiz": "2025/10/19"
+            },
+            "Onyomi": {
+              "name": "Onyomi",
+              "correct_count": 6,
+              "missed_count": 0,
+              "mastery_perc": 75,
+              "last_quizzed": "2025/09/09",
+              "next_quiz": "2025/10/29"
+            },
+            "Kunyomi": {
+              "name": "Kunyomi",
+              "correct_count": 9,
+              "missed_count": 2,
+              "mastery_perc": 63,
+              "last_quizzed": "2025/10/15",
+              "next_quiz": "2025/11/09"
+            },
+            "Radical": {
+              "name": "Radical",
+              "correct_count": 4,
+              "missed_count": 1,
+              "mastery_perc": 50,
+              "last_quizzed": "2025/08/04",
+              "next_quiz": "2025/10/19"
+            },
+            "Writing": {
+              "name": "Writing",
+              "correct_count": 0,
+              "missed_count": 0,
+              "mastery_perc": 0,
+              "last_quizzed": "Not yet",
+              "next_quiz": "2025/07/09"
+            },
+            "Definition": {
+              "name": "Definition",
+              "correct_count": 6,
+              "missed_count": 0,
+              "mastery_perc": 75,
+              "last_quizzed": "2025/09/08",
+              "next_quiz": "2025/10/28"
+            }
+          }
+        },
+        "kanken": "10級",
+        "jlpt": "N5",
+        "radical_name": "ひ,にちへん",
+        "radical": "日"
+      }
+    ]
+  }
+}

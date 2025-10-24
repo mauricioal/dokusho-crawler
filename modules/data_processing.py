@@ -33,32 +33,6 @@ def fetch_webpage_content(url: str) -> Document:
     except Exception as e:
         logger.error(f"Error fetching webpage content from {url}: {e}")
         return ""
-
-def split_profile_data(profile_data: Dict[str, Any]) -> List:
-    """Splits the LinkedIn profile JSON data into nodes.
-    
-    Args:
-        profile_data: LinkedIn profile data dictionary.
-        
-    Returns:
-        List of document nodes.
-    """
-    try:
-        # Convert the profile data to a JSON string
-        profile_json = json.dumps(profile_data)
-
-        # Create a Document object from the JSON string
-        document = Document(text=profile_json)
-
-        # Split the document into nodes using SentenceSplitter
-        splitter = SentenceSplitter(chunk_size=config.CHUNK_SIZE)
-        nodes = splitter.get_nodes_from_documents([document])
-        
-        logger.info(f"Created {len(nodes)} nodes from profile data")
-        return nodes
-    except Exception as e:
-        logger.error(f"Error in split_profile_data: {e}")
-        return []
     
 def split_webpage_data(webpage_data: Document) -> List:
     """Splits the webpage Document into nodes.

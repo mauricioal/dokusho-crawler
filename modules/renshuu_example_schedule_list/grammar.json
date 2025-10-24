@@ -1,0 +1,41 @@
+{
+  "schedules": [
+    {
+      "id": "7081973",
+      "name": "Beginner Japanese/N5"
+    }
+  ],
+  "contents": {
+    "pg": 1,
+    "total_pg": 2,
+    "terms": [
+      {
+        "id": "539",
+        "title_english": "",
+        "title_japanese": "あまり〜ない",
+        "user_data": {
+          "correct_count": 18,
+          "missed_count": 0,
+          "mastery_avg_perc": "75",
+          "study_vectors": {
+            "Main": {
+              "name": "Main",
+              "correct_count": 18,
+              "missed_count": 0,
+              "mastery_perc": 75,
+              "last_quizzed": "2025/10/09",
+              "next_quiz": "2025/12/26"
+            }
+          }
+        },
+        "meaning": {
+          "spa": "No muy [A]; no hace [A] mucho (solo un poco)"
+        },
+        "meaning_long": {
+          "spa": "Muestra un grado/cantidad muy pequeño de un sustantivo, adjetivo o acción."
+        },
+        "url": "https://www.renshuu.org/grammar/463"
+      }
+    ]
+  }
+}
