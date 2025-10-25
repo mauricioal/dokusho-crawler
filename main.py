@@ -7,7 +7,7 @@ import argparse
 
 from modules.renshuu_extraction import UserProfile, VocabularyTerm, KanjiTerm, GrammarTerm, extract_user_profile, extract_study_terms, create_mock_user_profile
 from modules.data_processing import fetch_webpage_content, split_webpage_data, create_vector_database, verify_embeddings
-from modules.query_engine import generate_initial_facts, generate_summary, answer_user_query
+from modules.query_engine import generate_summary, answer_user_query, generate_story_from_vocabulary
 from typing import Dict, Any, Optional
 import config
 
@@ -21,6 +21,40 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
+
+def extract_user_learning_data(user_profile: UserProfile) -> tuple[str, str, int]:
+    """
+    Extract JLPT level and mastered vocabulary from user profile.
+    
+    Returns:
+        tuple: (jlpt_level, vocabulary_string, vocab_count)
+    """
+    # Determine JLPT level (minimum level with 50%+ progress)
+    jlpt_level = "N5"  # default
+    for level in range(1, 6):
+        level_key = f"n{level}"
+        vocab_progress = user_profile.level_progress_percs.get("vocab", {})
+        if vocab_progress.get(level_key, 0) >= 30:
+            jlpt_level = f"N{level}"
+            break
+    
+    # Extract mastered vocabulary (50%+ mastery)
+    mastered_vocab = []
+    for term in user_profile.vocabulary_terms:
+        raw = term.user_data.get("mastery_avg_perc", 0)
+        try:
+            mastery = float(str(raw).strip().rstrip('%')) if raw is not None else 0.0
+        except (ValueError, TypeError):
+            mastery = 0.0
+        if mastery >= 50:
+            vocab_entry = f"{term.kanji_full} ({term.hiragana_full})"
+            mastered_vocab.append(vocab_entry)
+    
+    # Limit to top 100 most mastered terms (option to include all)
+    vocab_list = mastered_vocab#[:100]
+    vocabulary_string = ", ".join(vocab_list)
+    
+    return jlpt_level, vocabulary_string, len(mastered_vocab)
 
 def process_webpage(webpage_url: str):
     """
@@ -122,6 +156,20 @@ def main():
             print(f"Sample kanji term: {user_profile.kanji_terms[0].kanji} - {user_profile.kanji_terms[0].definition}")
         if user_profile.grammar_terms:
             print(f"Sample grammar term: {user_profile.grammar_terms[0].title_japanese} ({user_profile.grammar_terms[0].title_english})")
+        
+        # Generate a story based on user's vocabulary
+        print("\n=== Generating Story ===")
+        jlpt_level, vocab_string, total_vocab = extract_user_learning_data(user_profile)
+        print(f"Detected JLPT Level: {jlpt_level}")
+        print(f"Total mastered vocabulary: {total_vocab}")
+        print(f"Using top 100 terms for story generation...\n")
+
+        if vocab_string:
+            story = generate_story_from_vocabulary(jlpt_level, vocab_string)
+            print("Generated Story:")
+            print(story)
+        else:
+            print("No mastered vocabulary found. Cannot generate story.")
     else:
         print("Using mock data for demonstration...")
         user_profile = create_mock_user_profile()
@@ -131,6 +179,20 @@ def main():
         print(f"\nMock Vocabulary terms: {len(user_profile.vocabulary_terms)}")
         print(f"Mock Kanji terms: {len(user_profile.kanji_terms)}")
         print(f"Mock Grammar terms: {len(user_profile.grammar_terms)}")
+        
+        # Generate a story based on mock user's vocabulary
+        print("\n=== Generating Story ===")
+        jlpt_level, vocab_string, total_vocab = extract_user_learning_data(user_profile)
+        print(f"Detected JLPT Level: {jlpt_level}")
+        print(f"Total mastered vocabulary: {total_vocab}")
+        print(f"Using top 100 terms for story generation...\n")
+
+        if vocab_string:
+            story = generate_story_from_vocabulary(jlpt_level, vocab_string)
+            print("Generated Story:")
+            print(story)
+        else:
+            print("No mastered vocabulary found. Cannot generate story.")
 
 if __name__ == "__main__":
     main()

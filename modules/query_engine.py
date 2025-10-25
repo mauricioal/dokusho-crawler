@@ -10,46 +10,6 @@ import config
 
 logger = logging.getLogger(__name__)
 
-def generate_initial_facts(index: VectorStoreIndex) -> str:
-    """Generates interesting facts about the person\'s career or education.
-    
-    Args:
-        index: VectorStoreIndex containing the LinkedIn profile data.
-        
-    Returns:
-        String containing interesting facts about the person.
-    """
-    try:
-        # Create LLM for generating facts
-        watsonx_llm = create_watsonx_llm(
-            temperature=0.0,
-            max_new_tokens=500,
-            decoding_method="sample"
-        )
-        
-        # Create prompt template
-        facts_prompt = PromptTemplate(template=config.INITIAL_FACTS_TEMPLATE)
-        
-        # Create query engine
-        query_engine = index.as_query_engine(
-            streaming=False,
-            similarity_top_k=config.SIMILARITY_TOP_K,
-            llm=watsonx_llm,
-            text_qa_template=facts_prompt
-        )
-        
-        # Execute the query
-        query = "Provide three interesting facts about this person\'s career or education."
-        response = query_engine.query(query)
-        
-        # Return the facts
-        return response.response
-    except Exception as e:
-        logger.error(f"Error in generate_initial_facts: {e}")
-        return "Failed to generate initial facts."
-    
-    return "Facts will be generated here."  # Replace with your implementation
-
 def generate_summary(index: VectorStoreIndex) -> str:
     """Generates a summary of a provided webpage based on its content.
     Args:
@@ -128,3 +88,37 @@ def answer_user_query(index: VectorStoreIndex, user_query: str) -> Any:
     except Exception as e:
         logger.error(f"Error in answer_user_query: {e}")
         return "Failed to get an answer."
+
+def generate_story_from_vocabulary(jlpt_level: str, vocabulary_list: str, max_tokens: int = 3000) -> str:
+    """
+    Generate a simple Japanese story using user's mastered vocabulary.
+    
+    Args:
+        jlpt_level: User's JLPT level (e.g., "N5", "N4")
+        vocabulary_list: Comma-separated list of mastered vocabulary
+        max_tokens: Maximum tokens for story generation
+        
+    Returns:
+        Generated story in Japanese
+    """
+    try:
+        # Create LLM for story generation
+        watsonx_llm = create_watsonx_llm(
+            temperature=0.7,  # Higher temperature for creative story
+            max_new_tokens=max_tokens,
+            decoding_method="sample"
+        )
+        
+        # Format the prompt
+        story_prompt = config.STORY_GENERATION_TEMPLATE.format(
+            jlpt_level=jlpt_level,
+            vocabulary_list=vocabulary_list
+        )
+        
+        # Generate story directly using LLM
+        response = watsonx_llm.complete(story_prompt)
+        
+        return response.text.strip()
+    except Exception as e:
+        logger.error(f"Error in generate_story_from_vocabulary: {e}")
+        return "Failed to generate story."

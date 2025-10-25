@@ -9,7 +9,7 @@ import gradio as gr
 from modules.data_extraction import extract_linkedin_profile
 from modules.data_processing import split_profile_data, create_vector_database, verify_embeddings
 from modules.llm_interface import change_llm_model
-from modules.query_engine import generate_initial_facts, answer_user_query
+from modules.query_engine import generate_summary, answer_user_query
 import config
 
 # Set up logging
@@ -74,7 +74,7 @@ def process_profile(linkedin_url, api_key, use_mock, selected_model):
             logger.warning("Some embeddings may be missing or invalid")
         
         # Generate initial facts
-        facts = generate_initial_facts(index)
+        facts = generate_summary(index)
         
         # Generate a unique session ID
         session_id = str(uuid.uuid4())
