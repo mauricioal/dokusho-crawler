@@ -47,7 +47,7 @@ def extract_user_learning_data(user_profile: UserProfile) -> tuple[str, str, int
             mastery = float(str(raw).strip().rstrip('%')) if raw is not None else 0.0
         except (ValueError, TypeError):
             mastery = 0.0
-        if mastery >= 50:
+        if mastery >= 70:
             vocab_entry = f"{term.kanji_full} ({term.hiragana_full})"
             mastered_vocab.append(vocab_entry)
     
@@ -188,6 +188,7 @@ def main():
         print("\n=== Generating Story ===")
         jlpt_level, vocab_string, total_vocab = extract_user_learning_data(user_profile)
         print(f"Detected JLPT Level: {jlpt_level}")
+        print(f"Vocabulary String: {vocab_string}")
         print(f"Total mastered vocabulary: {total_vocab}")
         print(f"Using top 100 terms for story generation...\n")
 
@@ -195,6 +196,14 @@ def main():
             story = generate_story_from_vocabulary(jlpt_level, vocab_string)
             print("Generated Story:")
             print(story)
+            
+            # Export to file
+            with open("generated_story.txt", "w", encoding="utf-8") as f:
+                f.write(f"JLPT Level: {jlpt_level}\n")
+                f.write(f"Vocabulary: {vocab_string}\n\n")
+                f.write("Generated Story:\n")
+                f.write(story)
+            print("\nStory exported to generated_story.txt")
         else:
             print("No mastered vocabulary found. Cannot generate story.")
     else:
@@ -218,6 +227,14 @@ def main():
             story = generate_story_from_vocabulary(jlpt_level, vocab_string)
             print("Generated Story:")
             print(story)
+            
+            # Export to file
+            with open("generated_story.txt", "w", encoding="utf-8") as f:
+                f.write(f"JLPT Level: {jlpt_level}\n")
+                f.write(f"Vocabulary: {vocab_string}\n\n")
+                f.write("Generated Story:\n")
+                f.write(story)
+            print("\nStory exported to generated_story.txt")
         else:
             print("No mastered vocabulary found. Cannot generate story.")
 
