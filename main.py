@@ -8,6 +8,7 @@ import argparse
 from modules.renshuu_extraction import UserProfile, VocabularyTerm, KanjiTerm, GrammarTerm, extract_user_profile, extract_study_terms, create_mock_user_profile
 from modules.data_processing import fetch_webpage_content, split_webpage_data, create_vector_database, verify_embeddings
 from modules.query_engine import generate_summary, answer_user_query, generate_story_from_vocabulary
+from modules import persistence
 from typing import Dict, Any, Optional
 import config
 
@@ -125,6 +126,7 @@ def main():
     parser.add_argument('--api-key', type=str, help='Renshuu API key')
     parser.add_argument('--mock', action='store_true', help='Use mock data instead of API')
     parser.add_argument('--model', type=str, help='LLM model to use (e.g., "ibm/granite-3-2-8b-instruct")')
+    parser.add_argument('--force-refresh', action='store_true', help='Force refresh data from Renshuu API')
     
     args = parser.parse_args()
     
@@ -136,14 +138,39 @@ def main():
 
     # Extract Renshuu user profile
     print("\n=== Renshuu User Profile ===")
-    user_profile = extract_user_profile(config.RENSHUU_API_KEY)
+    
+    # Initialize database
+    persistence.init_db()
+    
+    user_profile = None
+    
+    # Try to load from DB if not forced refresh
+    if not args.force_refresh:
+        print("Checking local database for existing profile...")
+        user_profile = persistence.get_user_profile()
+        if user_profile:
+            print("Loaded profile from local database.")
+            
+    # If no profile found or forced refresh, fetch from API
+    if not user_profile:
+        print("Fetching fresh data from Renshuu API...")
+        user_profile = extract_user_profile(config.RENSHUU_API_KEY)
+        if user_profile:
+            print(f"User ID: {user_profile.id}")
+            print(f"Real Name: {user_profile.real_name}")
+            print(f"Level Progress: {user_profile.level_progress_percs}")
+            
+            # Extract and populate terms
+            user_profile = extract_study_terms(config.RENSHUU_API_KEY, user_profile)
+            
+            # Save to database
+            persistence.save_user_profile(user_profile)
+            print("Saved profile to local database.")
+            
     if user_profile:
         print(f"User ID: {user_profile.id}")
         print(f"Real Name: {user_profile.real_name}")
         print(f"Level Progress: {user_profile.level_progress_percs}")
-        
-        # Extract and populate terms
-        user_profile = extract_study_terms(config.RENSHUU_API_KEY, user_profile)
         
         print(f"\nVocabulary terms: {len(user_profile.vocabulary_terms)}")
         print(f"Kanji terms: {len(user_profile.kanji_terms)}")

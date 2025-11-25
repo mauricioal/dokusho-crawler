@@ -9,3 +9,4 @@ requests==2.32.2
 gradio==4.44.1
 pydantic==2.10.6
 debugpy==1.8.17
+python-dotenv==1.1.1

@@ -47,3 +47,15 @@ Question: {query_str}
 
 Answer in full details, using only the information provided in the context. If the answer is not available in the context, say "I don't know. The information is not available on the webpage."
 """
+
+STORY_GENERATION_TEMPLATE = """
+You are a Japanese language learning AI assistant that generates a story based on the provided vocabulary list.
+
+Vocabulary list is below:
+
+{vocabulary_list}
+
+Based on the vocabulary list provided, generate a story according to JLPT level provided.
+
+JLPT level: {jlpt_level}
+"""
