@@ -4,6 +4,7 @@ import sys
 import time
 import logging
 import argparse
+import random
 
 from modules.renshuu_extraction import UserProfile, VocabularyTerm, KanjiTerm, GrammarTerm, extract_user_profile, extract_study_terms, create_mock_user_profile
 from modules.data_processing import fetch_webpage_content, split_webpage_data, create_vector_database, verify_embeddings
@@ -47,11 +48,12 @@ def extract_user_learning_data(user_profile: UserProfile) -> tuple[str, str, int
             mastery = float(str(raw).strip().rstrip('%')) if raw is not None else 0.0
         except (ValueError, TypeError):
             mastery = 0.0
-        if mastery >= 70:
+        if mastery > 50:
             vocab_entry = f"{term.kanji_full} ({term.hiragana_full})"
             mastered_vocab.append(vocab_entry)
     
     # Limit to top 100 most mastered terms (option to include all)
+    random.shuffle(mastered_vocab)
     vocab_list = mastered_vocab#[:100]
     vocabulary_string = ", ".join(vocab_list)
     

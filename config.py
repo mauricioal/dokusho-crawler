@@ -6,6 +6,7 @@ WATSONX_PROJECT_ID = "skills-network"
 
 # Model settings
 LLM_MODEL_ID = "ibm/granite-3-2-8b-instruct"
+LLM_MODEL_ID = "meta-llama/llama-3-3-70b-instruct"
 EMBEDDING_MODEL_ID = "ibm/slate-125m-english-rtrvr"
 
 
@@ -50,12 +51,16 @@ Answer in full details, using only the information provided in the context. If t
 
 STORY_GENERATION_TEMPLATE = """
 You are a Japanese language learning AI assistant that generates a story based on the provided vocabulary list.
+You are a Japanese language learning AI assistant that generates a simple story based only on the vocabulary list that your student has mastered.
 
 Vocabulary list is below:
 
 {vocabulary_list}
 
 Based on the vocabulary list provided, generate a story according to JLPT level provided.
+Based on the vocabulary list provided, generate a story that is appropriate for a student at the JLPT level provided using only the vocabulary in the list.
+
+Provide as well the translation of the story in English.
 
 JLPT level: {jlpt_level}
 """
